@@ -1,15 +1,3 @@
-I18N
-====
+In 2008 I started a project called Crosstips. It was an experiment.
 
-Make messages:
-
- django-admin.py makemessages -l sv;
- django-admin.py makemessages -l fr;
- django-admin.py makemessages -l en_GB;
- django-admin.py makemessages -l en_US;
- 
- 
-Compile messages:
-
- django-admin.py compilemessages
- 
+The code slowly degraded in disrepair. This repo is a resurrection attempt.
