@@ -1,0 +1,133 @@
+{% extends base_template %}
+{% load i18n %}
+{% load static %}
+
+{% block extracss %}
+<style type="text/css">
+#allslots {
+  padding:0; margin:0;
+}
+div.sugg {
+  line-height:150%;
+}
+div.sugg span {
+  font-family:"courier new",courier;
+  padding:0px 5px;
+  font-size:18px;
+  border:1px solid #ccc;
+}
+div.sugg abbr {
+  padding-left:10px;
+  font-size:80%;
+}
+
+span.match {
+  font-weight:bold;
+}
+div.error {
+  font-weight:bold;
+  color:red;
+}
+em.definition { font-size:80%; padding-left:10px; color:#666666; }
+a.clear-search { font-size:80%;}
+input#id_length, #allslots input { font-weight:bold; font-size:120% }
+p.recently-found { font-size:80%; }
+</style>
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript" src="{% static "search/js/jquery.form.js" %}"></script>
+<script type="text/javascript" src="{% static "search/js/solve.js" %}"></script>
+{% endblock %}
+
+
+{% block main %}
+
+<form action="./" id="solutions">
+<p>
+  <label for="id_length">{% trans "Number of letters" %}:</label>
+  <input id="id_length" type="number" name="l" size="2" maxlength="2" autocomplete="off" value="{{ length }}"><br>
+
+  <label>{% trans "Slots" %}:</label>
+  <span id="allslots">
+  {% for letter in slots %}<input name="s" value="{{ letter }}" size="1" maxlength="1">{% endfor %}
+  </span>
+  <br>
+  {% if accept_clues %}
+    <span id="clues" style="display:none">
+    <label>{% trans "Clue(s):" %}</label>
+    <input name="clues" value="" size="12">
+      <small>(word clues separated by a comma)</small>
+    </span><br>
+  {% endif %}
+  {% if accept_clues %}
+    <span id="notletters" style="display:none">
+    <label>{% trans "Letters it is <em>not</em>:" %}</label>
+    <input name="notletters" value="" size="12">
+      <small>(useful when playing hangman)</small>
+    </span><br>
+  {% endif %}
+
+
+  <input type="submit" value="{% trans "Search" %}">
+  <img id="loading" style="display:none" src="{% static "search/images/loading-bar.gif" %}" alt="{% trans "Loading" %}" width="150" height="15">
+  <a href="./" id="clear-search" style="display:none">{% trans "clear search" %}</a>
+</p>
+</form>
+
+<div id="error__no_s" class="error" style="display:none">
+{% trans "No letters all?" %}
+</div>
+<div id="error__ajax" class="error" style="display:none">
+{% trans "Sorry. Unable to do a search right now. Please try again a bit later." %}<br>
+<code class="response"></code>
+</div>
+
+
+<div id="matches"></div>
+<div id="alternatives"></div>
+
+{% if show_example_search %}
+<div id="for-example">
+<p>{% blocktrans %}
+Stumped? Crosstips <strong>helps</strong> you <strong>solve</strong> your <strong>crossword puzzles</strong>.
+Enter the length of the word and fill in the known letters.
+{% endblocktrans %}</p>
+
+{% ifequal request.LANGUAGE_CODE "sv" %}
+<p>Till exempel, <a href="/" rel="nofollow" onclick="run_example(7, ['K','O','','','O','','D']);return false">vilket ord b&ouml;rjar p&auml; KO, femte bokstaven O och slutar p&auml; bokstaven D?</a>
+{% else %}
+<p>For example, <a href="/" rel="nofollow" onclick="run_example(9, ['C','','O','','','','','R','D']);return false">what's
+a 9 letter word that starts with C, third letter O and ends with RD?</a>
+{% endifequal %}
+</div>
+
+{% else %}
+
+{% endif %}
+
+<p>&nbsp;</p>
+
+{% comment %}
+<p>
+<strong>{% trans "See also:" %}</strong>
+<a href="/simple/">{% trans "simple inferface" %}</a>,
+<a href="/iphone/">{% trans "iPhone interface" %}</a>,
+<a href="/word-whomp/">{% trans "Word Whomp" %}</a>
+</p>
+{% endcomment %}
+
+{% if most_recent_search_word %}
+  <p>&nbsp;</p>
+  <p class="recently-found">
+  <strong>{% trans "By the way..." %}</strong><br>
+  {% trans "Crosstips recently helped someone find the word:" %}
+  <a href="{{ searches_summary_link }}#{{ most_recent_search_word.word }}">{{ most_recent_search_word.word }}</a>
+  {% if most_recent_search_word.definition %}
+  <br>({% trans "which means" %} <em>{{ most_recent_search_word.definition }}</em>)
+  {% endif %}
+  </p>
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="{{ request.LANGUAGE_CODE }}">
+{% load i18n %}
+{% load static %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+<head>
+  <meta http-equiv="Content-Language" content="{{ LANGUAGE_CODE }}">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="description" content="{% block meta_content %}{% trans "helps you solve your crossword puzzles" %}{% endblock %}">
+  <meta name="keywords" content="{% block meta_keywords %}{% trans "crosstip, crosstips, crossword, crosswords, puzzle, crossword puzzles" %}{% endblock %}">
+  <title>{% block title %}{% trans "Crosstips" %} - {% trans "crossword solver, fast and simple" %}{% endblock %}</title>
+
+  <link rel="shortcut icon" href="{% static "search/images/favicon.ico" %}">
+  <link rel="stylesheet" href="{% static "search/css/boilerplate.css" %}" type="text/css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="{% static "search/css/core.css" %}" type="text/css" media="screen" charset="utf-8">
+
+{% block extracss %}
+{% endblock %}
+
+{% if GOOGLE_ANALYTICS %}
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-94373-9']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script');
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' :
+        'http://www') + '.google-analytics.com/ga.js';
+    ga.setAttribute('async', 'true');
+    document.documentElement.firstChild.appendChild(ga);
+  })();
+</script>
+{% endif %}
+
+</head>
+
+<body id="profile_6" class=" user_book_list" {% block extrabody %}{% endblock %}>
+  <div id="page">
+
+    <div id="body">
+
+
+          {% block reader_sidebar_outer %}
+          <div class="sidebar reader_sidebar">
+          {% block reader_sidebar %}
+          <form action="/i18n/setlang/" method="post">
+            <ul>
+              {% for language_option in language_options %}
+                <li {% if language_option.on %}class="on"{% endif %}><a
+                {% if language_option.title %}title="{{ language_option.title }}"{% endif %}
+                href="{{ language_option.href }}">{{ language_option.label }}</a></li>
+              {% endfor %}
+            </ul>
+
+          </form>
+
+          {% endblock %} {# reader_sidebar #}
+          </div>
+          {% endblock %} {# reader_sidebar_outer #}
+
+
+        <div class="content_wrapper">
+          <div class="content">
+
+
+
+            <div class="content_title">
+	        <h3 style="float:right">{% block pagetitletagline %}{% trans "crossword solver, fast and simple" %}{% endblock %}</h3>
+                <h2>{% block pagetitle %}{% trans "Crosstips" %}{% endblock %}</h2>
+            </div>
+
+{% block main %}
+{% endblock %}
+
+
+          </div>
+  {% block content_sidebar_outer %}
+          <div class="content_sidebar">
+
+  {% block content_sidebar %}
+  <h3>{% trans "Statistics" %}</h3>
+  <ul>
+    <li><a>{% trans "Searches today" %} <em>{{ no_searches_today }}</em></a></li>
+    <li><a>{% trans "Searches yesterday" %} <em>{{ no_searches_yesterday }}</em></a></li>
+    <li><a>{% trans "Searches this week" %} <em>{{ no_searches_this_week }}</em></a></li>
+    <li><a>{% trans "Searches this month" %} <em>{{ no_searches_this_month }}</em></a></li>
+    <li><a>{% trans "Searches this year" %} <em>{{ no_searches_this_year }}</em></a></li>
+    <li><a>{% trans "Total number of words" %} <em>{{ no_total_words }}</em></a></li>
+  </ul>
+  <br><br>
+  <br><br>
+  <br>
+
+  {% endblock %}
+
+          </div>
+  {% endblock %}
+        </div>
+
+    </div>
+
+
+    <div id="footer">
+
+      <p class="copyright">
+        <small>
+          <a href="/">{% trans "Crosstips" %} &copy; 2009-2017</a>
+          <a href="https://www.peterbe.com/">Peterbe.com</a>
+          <a href="https://songsear.ch">Song Search</a>
+          {% ifequal LANGUAGE_CODE "sv" %}
+          <a href="/om/krysstips/">Om Krysstips</a>
+          <a href="/om/dsso/">Om DSSO</a>
+          {% else %}
+          <a href="/about/crosstips/">About Crosstips</a>
+          {% endifequal %}
+          {% comment %}<a href="/statistics/calendar/">{% trans "Calendar" %}</a>{% endcomment %}
+          {% comment %}<a href="/statistics/graph/">{% trans "Graph" %}</a>{% endcomment %}
+          {% if searches_summary_link %}
+          <a href="{{ searches_summary_link }}">{% trans "Searches summary" %}</a>
+          {% endif %}
+        </small>
+      </p>
+    </div>
+
+
+  </div>
+
+<script type="text/javascript" src="{% static "search/js/jquery-1.3.2.min.js" %}"></script>
+<script type="text/javascript" src="{% static "search/js/jquery.site.js" %}"></script>
+{% block extrajs %}{% endblock %}
+
+</body>
+</html>

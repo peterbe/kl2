@@ -1,0 +1,92 @@
+{% extends base_template %}
+{% load i18n %}
+
+{% block title %}{% trans "Searches summary in" %} {{ month }} {{ year }} - {% trans "Crosstips" %}{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript">
+
+function __focus_li(li) {
+     li.fadeOut(200, function() {
+        li.addClass('focused');
+        li.fadeIn("slow");
+      });
+}
+
+$(function() {
+  if (document.location.hash) {
+    var a = $('a[name="' +document.location.hash.substring(1, document.location.hash.length) +'"]');
+    if (a.size()) {
+      __focus_li(a.parent('li'));
+    }
+  }
+  $('li', 'ul.words').click(function() {
+    $('li.focused').removeClass('focused');
+    if ($('a', this).attr('name').toLowerCase() == document.location.hash.substring(1, document.location.hash.length).toLowerCase()) {
+      //document.location.hash = '';
+    } else {
+      __focus_li($(this));
+      document.location.hash = $('a', this).attr('name');
+    }
+  });
+});
+</script>
+{% endblock %}
+
+{% block extracss %}
+<style type="text/css">
+li.focused { background-color:#efefef; }
+ul.words em { padding-left:10px; font-size:70%; color:#666666; line-height:1px;}
+ul.words a { padding-left:10px; font-size:70%; }
+</style>
+{% endblock %}
+
+{% block meta_content %}{% trans "Searches summary in" %} {{ month }} {{ year }}{% endblock %}
+{% block meta_keywords %}{% for word in all_words_plain %}{{ word }},{% endfor %}{% endblock %}
+
+{% block main %}
+<h3>{% trans "Searches summary in" %} {{ month }} {{ year }}</h3>
+
+<p>Crosstips helped to find the following words this month:</p>
+{% for language, words in found_words_repeats.items %}
+  {% if words %}
+    <p><strong>{{ language }}</strong></p>
+    <ul class="words">
+    {% for word in words %}
+      <li class="{{ language }} {% if not word.definitions %}definitionless{% endif %}">{{ word.word }}
+      <a name="{{ word.word }}"></a>
+
+        {% if word.definitions %}
+        <br/>
+
+          {% for definition in word.definitions %}
+          <em>{{ definition }}</em>{% if not forloop.last %};<br/>{% endif %}
+          {% endfor %}
+        {% endif %}
+      </li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endfor %}
+<br/>
+
+<br/>
+<p>These are words that are found when someone searches with exactly so many clues
+that only one single alternative is found.
+</p>
+
+<p style="font-size:80%;padding-top:60px">
+
+{% if previous_month_link %}
+<a href="{{ previous_month_link }}">&lt;&lt;&lt; {% trans "Previous month" %}</a>
+{% endif %}
+&nbsp;
+{% if next_month_link %}
+<a href="{{ next_month_link }}">{% trans "Next month" %} &gt;&gt;&gt;</a>
+<br/>
+{% endif %}
+<br/>
+<a href="/">&lt;&lt; {% trans "Go back to home page" %}</a>
+</p>
+
+{% endblock %}

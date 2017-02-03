@@ -1,0 +1,23 @@
+{% extends base_template %}
+{% load i18n %}
+
+{% block title %}{% trans "About Crosstips" %}{% endblock %}
+
+{% block main %}
+<h3>{% trans "About Crosstips" %}</h3>
+
+<p>Crosstips helps you when you get stuck solving crosswords. It's not
+  cheating if you really got stuck simply don't know the word
+  you're looking for. </p>
+
+<p>This website was done over Christmas 2008 by
+  <a href="https://www.peterbe.com/">Peter Bengtsson</a> in
+  <a href="https://www.djangoproject.com/">Django</a>.
+  The words come from the Open Source Ubuntu package
+  <a href="http://packages.ubuntu.com/intrepid/wordlist">wordlist</a>.</p>
+
+<p style="font-size:80%;padding-top:60px">
+<a href="/">&lt;&lt; {% trans "Go back to home page" %}</a>
+</p>
+
+{% endblock %}
