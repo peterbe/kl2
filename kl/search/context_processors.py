@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.utils.translation import get_language
 from django.utils import timezone
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from kl.search.views import get_search_stats
 

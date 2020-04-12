@@ -93,7 +93,8 @@ class Search(models.Model):
     language = models.CharField(max_length=5, default='')
     search_type = models.CharField(max_length=50, default='')
 
-    found_word = models.ForeignKey(Word, null=True, blank=True)
+    found_word = models.ForeignKey(Word, null=True, blank=True,
+        on_delete=models.deletion.CASCADE)
 
     def __str__(self):
         return self.search_word

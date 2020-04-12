@@ -3,6 +3,8 @@ from django.conf.urls import url
 from kl.search import views
 
 
+app_name = 'search'
+
 urlpatterns = [
     url(
         r'^$',
